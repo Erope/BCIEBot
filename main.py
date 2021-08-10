@@ -37,8 +37,12 @@ def bcie_command(update: Update, context: CallbackContext) -> None:
     # 字体大小
     font_size = 148
     # 文字内容
-    if user is None or len(user['username']) == 0:
+    if user is None:
         update.message.reply_text("请设置用户名.")
+        return
+    elif len(user['username']) == 0:
+        update.message.reply_text("请设置用户名.")
+        return
     text = user['username']
     uid = user['id']
 
@@ -88,10 +92,10 @@ def bcie_command(update: Update, context: CallbackContext) -> None:
     imgByteArr = io.BytesIO()
     bg.save(imgByteArr, format='PNG')
     imgByteArr = imgByteArr.getvalue()
-    if update.message.chat['type'] == 'group':
-        update.message.reply_photo(imgByteArr)
-    else:
+    if update.message.chat['type'] == 'private':
         update.message.reply_document(imgByteArr)
+    else:
+        update.message.reply_photo(imgByteArr)
 
 
 def main() -> None:
